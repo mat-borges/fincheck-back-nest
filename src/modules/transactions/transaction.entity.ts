@@ -7,7 +7,7 @@ import {
   UpdateDateColumn,
 } from 'typeorm';
 
-import { Category } from '../category/category.entity';
+import { Category } from '../categories/category.entity';
 
 @Entity()
 export class Transaction {

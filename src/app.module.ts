@@ -1,10 +1,10 @@
 import { ConfigModule, ConfigService } from '@nestjs/config';
 
+import { CategoryModule } from './modules/categories/category.module';
 import { Module } from '@nestjs/common';
 import { TransactionModule } from './modules/transactions/transaction.module';
 import { TypeOrmModule } from '@nestjs/typeorm';
 import { configValidationSchema } from './config/config.schema';
-import { CategoryModule } from './modules/category/category.module';
 
 @Module({
   imports: [
