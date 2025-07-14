@@ -36,13 +36,7 @@ export class CategoryRepository extends Repository<Category> {
 
       return category;
     } catch (error) {
-      logUnknownError(
-        this.logger,
-        'get category by id',
-        undefined,
-        undefined,
-        error,
-      );
+      logUnknownError(this.logger, 'get category by id', undefined, undefined, error);
     }
   }
 }

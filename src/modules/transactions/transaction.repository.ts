@@ -25,7 +25,10 @@ export class TransactionRepository extends Repository<Transaction> {
     }
   }
 
-  async createTransaction(createTransactionDto: CreateTransactionDto, category: Category): Promise<Transaction> {
+  async createTransaction(
+    createTransactionDto: CreateTransactionDto,
+    category: Category,
+  ): Promise<Transaction> {
     const { title, amount, date, categoryId, type } = createTransactionDto;
 
     const transaction = this.create({ title, amount, date, categoryId, category, type });
