@@ -1,6 +1,8 @@
 import { DataSource, Repository } from 'typeorm';
 import { Injectable, Logger } from '@nestjs/common';
 
+import { Category } from '@modules/categories/category.entity';
+import { CreateTransactionDto } from './dto/create-transaction.dto';
 import { Transaction } from './transaction.entity';
 import { logUnknownError } from 'src/common/utils/log-error.util';
 
@@ -19,13 +21,21 @@ export class TransactionRepository extends Repository<Transaction> {
 
       return transactions;
     } catch (error) {
-      logUnknownError(
-        this.logger,
-        'get transactions',
-        undefined,
-        undefined,
-        error,
-      );
+      logUnknownError(this.logger, 'get transactions', undefined, undefined, error);
+    }
+  }
+
+  async createTransaction(createTransactionDto: CreateTransactionDto, category: Category): Promise<Transaction> {
+    const { title, amount, date, categoryId, type } = createTransactionDto;
+
+    const transaction = this.create({ title, amount, date, categoryId, category, type });
+
+    try {
+      await this.save(transaction);
+
+      return transaction;
+    } catch (error) {
+      logUnknownError(this.logger, 'create transaction', undefined, undefined, error);
     }
   }
 }

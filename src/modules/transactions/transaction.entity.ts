@@ -2,6 +2,7 @@ import {
   Column,
   CreateDateColumn,
   Entity,
+  JoinColumn,
   ManyToOne,
   PrimaryGeneratedColumn,
   UpdateDateColumn,
@@ -26,7 +27,11 @@ export class Transaction {
   @ManyToOne(() => Category, (category) => category.transactions, {
     eager: true,
   })
+  @JoinColumn({ name: 'categoryId' })
   category!: Category;
+
+  @Column()
+  categoryId!: string;
 
   @Column({ type: 'decimal', precision: 10, scale: 2 })
   amount!: number;

@@ -1,7 +1,8 @@
-import { Controller, Get, Logger } from '@nestjs/common';
+import { Body, Controller, Get, Logger, Post } from '@nestjs/common';
 
 import { Transaction } from './transaction.entity';
 import { TransactionService } from './transaction.service';
+import { CreateTransactionDto } from './dto/create-transaction.dto';
 
 @Controller('transactions')
 export class TransactionController {
@@ -13,5 +14,12 @@ export class TransactionController {
     this.logger.verbose('Retrieving all transactions');
 
     return this.transactionService.getTransactions();
+  }
+
+  @Post()
+  createTransaction(@Body() createTransactionDto: CreateTransactionDto) {
+    this.logger.verbose(`Creating a new transaction with title: ${createTransactionDto.title}`);
+
+    return this.transactionService.createTransaction(createTransactionDto);
   }
 }
