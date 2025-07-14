@@ -6,7 +6,7 @@ import { Transaction } from '../transactions/transaction.entity';
 @Entity()
 export class Category {
   @PrimaryGeneratedColumn('uuid')
-  id!: number;
+  id!: string;
 
   @Column({ unique: true })
   name!: string;
