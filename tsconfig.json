@@ -11,6 +11,13 @@
     "allowSyntheticDefaultImports": true,
     "sourceMap": true,
     "incremental": true,
-    "baseUrl": "./"
+    "baseUrl": "./",
+    "paths": {
+      "@modules/*": ["src/modules/*"],
+      "@config/*": ["src/config/*"],
+      "@common/*": ["src/common/*"],
+      "@seeds/*": ["src/seeds/*"],
+      "src/*": ["src/*"]
+    }
   }
 }
