@@ -1,4 +1,4 @@
-import { Category } from 'src/modules/category/category.entity';
+import { Category } from 'src/modules/categories/category.entity';
 import { DataSource } from 'typeorm';
 import { Logger } from '@nestjs/common';
 

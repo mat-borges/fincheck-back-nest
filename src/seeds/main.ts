@@ -1,8 +1,9 @@
 import * as dotenv from 'dotenv';
 
-import { Category } from 'src/modules/category/category.entity';
+import { Category } from 'src/modules/categories/category.entity';
 import { DataSource } from 'typeorm';
 import { Logger } from '@nestjs/common';
+import { Transaction } from '@modules/transactions/transaction.entity';
 import { seedCategories } from './category.seed';
 
 dotenv.config({
@@ -16,7 +17,7 @@ export const AppDataSource = new DataSource({
   username: process.env.DB_USERNAME,
   password: process.env.DB_PASSWORD,
   database: process.env.DB_DATABASE,
-  entities: [Category],
+  entities: [Category, Transaction],
   synchronize: true,
 });
 
