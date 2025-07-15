@@ -5,6 +5,7 @@ import { Module } from '@nestjs/common';
 import { TransactionModule } from './modules/transactions/transaction.module';
 import { TypeOrmModule } from '@nestjs/typeorm';
 import { configValidationSchema } from './config/config.schema';
+import { AuthModule } from './modules/auth/auth.module';
 
 @Module({
   imports: [
@@ -30,6 +31,7 @@ import { configValidationSchema } from './config/config.schema';
     }),
     TransactionModule,
     CategoryModule,
+    AuthModule,
   ],
 })
 export class AppModule {}
