@@ -9,6 +9,7 @@ import {
 } from 'typeorm';
 
 import { Category } from '../categories/category.entity';
+import { User } from '@modules/auth/user.entity';
 
 @Entity()
 export class Transaction {
@@ -24,14 +25,11 @@ export class Transaction {
   @Column()
   type!: 'income' | 'expense';
 
-  @ManyToOne(() => Category, (category) => category.transactions, {
-    eager: true,
-  })
-  @JoinColumn({ name: 'categoryId' })
-  category!: Category;
-
   @Column()
   categoryId!: string;
+
+  @Column()
+  userId!: string;
 
   @Column({ type: 'decimal', precision: 10, scale: 2 })
   amount!: number;
@@ -44,4 +42,14 @@ export class Transaction {
 
   @UpdateDateColumn()
   updatedAt!: Date;
+
+  @ManyToOne(() => Category, (category) => category.transactions, {
+    eager: true,
+  })
+  @JoinColumn({ name: 'categoryId' })
+  category!: Category;
+
+  @ManyToOne(() => User, (user) => user.transactions, { eager: false })
+  @JoinColumn({ name: 'userId' })
+  user!: User;
 }
