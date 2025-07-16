@@ -5,14 +5,14 @@ import { QueryFailedError } from 'typeorm';
 export function logUnknownError(
   logger: Logger,
   action: string,
-  user?: { username: string },
+  user?: { email: string },
   extra?: unknown,
   error?: unknown,
 ): never {
   let message = `Failed to ${action}`;
 
-  if (user?.username != null) {
-    message += ` for user "${user.username}"`;
+  if (user?.email != null) {
+    message += ` for user "${user.email}"`;
   }
 
   if (extra) {

@@ -27,7 +27,7 @@ export class UserRepository extends Repository<User> {
       await this.save(user);
       this.logger.verbose(`✅ Usuário (${email}) criado com sucesso!`);
     } catch (error) {
-      logUnknownError(this.logger, 'create user', { username: email }, '', error);
+      logUnknownError(this.logger, 'create user', { email: email }, '', error);
     }
   }
 }
