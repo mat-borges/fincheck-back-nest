@@ -11,7 +11,7 @@ export class AuthController {
   @Post('/signup')
   signUp(@Body() authCredentialsDto: AuthCredentialsDto): Promise<void> {
     this.logger.verbose(
-      `Sign up request with username: ${JSON.stringify(authCredentialsDto.email)}`,
+      `👤 Sign up request with username: ${JSON.stringify(authCredentialsDto.email)}`,
     );
 
     return this.authService.signUp(authCredentialsDto);
@@ -20,7 +20,7 @@ export class AuthController {
   @Post('/signin')
   signIn(@Body() authCredentialsDto: AuthCredentialsDto): Promise<{ accessToken: string }> {
     this.logger.verbose(
-      `Sign in request with username: ${JSON.stringify(authCredentialsDto.email)}`,
+      `👤 Sign in request with username: ${JSON.stringify(authCredentialsDto.email)}`,
     );
 
     return this.authService.signIn(authCredentialsDto);
