@@ -1,5 +1,5 @@
 import { DataSource, Repository } from 'typeorm';
-import { Injectable, Logger } from '@nestjs/common';
+import { Injectable, Logger, NotFoundException } from '@nestjs/common';
 
 import { Category } from './category.entity';
 import { logUnknownError } from 'src/common/utils/log-error.util';
@@ -12,11 +12,12 @@ export class CategoryRepository extends Repository<Category> {
   }
 
   async getCategories(): Promise<Category[]> {
-    this.logger.verbose('Retrieving all categories');
-
     try {
       const category = await this.find();
 
+      if (category.length <= 0 || !category) throw new NotFoundException('No categories found!');
+
+      this.logger.verbose('✅ Categories retrieved!');
       return category;
     } catch (error) {
       logUnknownError(this.logger, 'get category', undefined, undefined, error);

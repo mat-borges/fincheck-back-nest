@@ -14,25 +14,27 @@ export class TransactionRepository extends Repository<Transaction> {
   }
 
   async getTransactions(user: User): Promise<Transaction[]> {
-    this.logger.verbose(`Retrieving all transactions of user: ${user.email}...`);
-
     try {
       const transactions = await this.find({ where: { user: { id: user.id } } });
 
+      this.logger.verbose(`✅ Transactions retrieved! (user: ${user.email})`);
       return transactions;
     } catch (error) {
+      this.logger.error(`‼️ Failed to retrieve transactions! (user: ${user.email})`);
       logUnknownError(this.logger, 'get transactions', undefined, undefined, error);
     }
   }
 
   async getTransactionById(id: string, user: User): Promise<Transaction> {
-    this.logger.verbose('Retrieving transaction by ID...');
-
     try {
       const transaction = await this.findOne({ where: { user: { id: user.id }, id } });
 
-      if (!transaction) throw new NotFoundException('No transaction found with this ID');
+      if (!transaction) {
+        this.logger.error(`‼️ Failed to retrieve transaction! (user: ${user.email})`);
+        throw new NotFoundException('No transaction found with this ID');
+      }
 
+      this.logger.verbose('✅ Transaction retrieved! (user: ${user.email})');
       return transaction;
     } catch (error) {
       logUnknownError(this.logger, 'get transaction by ID', user, undefined, error);
@@ -58,8 +60,11 @@ export class TransactionRepository extends Repository<Transaction> {
     try {
       await this.save(transaction);
 
+      this.logger.verbose(`✅ Transaction created! (user: ${user.email})`);
+
       return transaction;
     } catch (error) {
+      this.logger.error(`‼️ Failed to create transaction! (user: ${user.email})`);
       logUnknownError(this.logger, 'create transaction', undefined, undefined, error);
     }
   }

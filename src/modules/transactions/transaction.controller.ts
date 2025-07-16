@@ -22,7 +22,7 @@ export class TransactionController {
 
   @Get('/:id')
   getTransactionById(@Param('id') id: string, @GetUser() user: User): Promise<Transaction> {
-    this.logger.verbose(`User ${user.email} retrieving specific transaction...`);
+    this.logger.verbose(`User ${user.email} retrieving transaction by id...`);
 
     return this.transactionService.getTransactionById(id, user);
   }

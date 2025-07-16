@@ -16,7 +16,6 @@ export class UserRepository extends Repository<User> {
 
   async createUser(authCredentialsDto: AuthCredentialsDto) {
     const { email, password } = authCredentialsDto;
-    this.logger.verbose(`👤 Criando novo usuário (${email})...`);
 
     const salt = await bcrypt.genSalt();
     const hashedPassword = await bcrypt.hash(password, salt);
@@ -25,7 +24,7 @@ export class UserRepository extends Repository<User> {
 
     try {
       await this.save(user);
-      this.logger.verbose(`✅ Usuário (${email}) criado com sucesso!`);
+      this.logger.verbose(`✅ User (${email}) created!`);
     } catch (error) {
       logUnknownError(this.logger, 'create user', { email: email }, '', error);
     }
