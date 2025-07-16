@@ -1,4 +1,4 @@
-import { Body, Controller, Get, Logger, Post, UseGuards } from '@nestjs/common';
+import { Body, Controller, Get, Logger, Param, Post, UseGuards } from '@nestjs/common';
 
 import { Transaction } from './transaction.entity';
 import { TransactionService } from './transaction.service';
@@ -18,6 +18,13 @@ export class TransactionController {
     this.logger.verbose(`User ${user.email} retrieving all transactions...`);
 
     return this.transactionService.getTransactions(user);
+  }
+
+  @Get('/:id')
+  getTransactionById(@Param('id') id: string, @GetUser() user: User): Promise<Transaction> {
+    this.logger.verbose(`User ${user.email} retrieving specific transaction...`);
+
+    return this.transactionService.getTransactionById(id, user);
   }
 
   @Post()

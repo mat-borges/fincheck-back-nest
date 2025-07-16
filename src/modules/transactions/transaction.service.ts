@@ -20,6 +20,10 @@ export class TransactionService {
     return this.transactionRepository.getTransactions(user);
   }
 
+  getTransactionById(id: string, user: User): Promise<Transaction> {
+    return this.transactionRepository.getTransactionById(id, user);
+  }
+
   async createTransaction(
     createTransactionDto: CreateTransactionDto,
     user: User,
