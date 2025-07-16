@@ -4,6 +4,7 @@ import { TransactionRepository } from './transaction.repository';
 import { Transaction } from './transaction.entity';
 import { CreateTransactionDto } from './dto/create-transaction.dto';
 import { CategoryRepository } from '@modules/categories/category.repository';
+import { User } from '@modules/auth/user.entity';
 
 @Injectable()
 export class TransactionService {
@@ -15,11 +16,14 @@ export class TransactionService {
     private categoryRepository: CategoryRepository,
   ) {}
 
-  getTransactions(): Promise<Transaction[]> {
-    return this.transactionRepository.getTransactions();
+  getTransactions(user: User): Promise<Transaction[]> {
+    return this.transactionRepository.getTransactions(user);
   }
 
-  async createTransaction(createTransactionDto: CreateTransactionDto): Promise<Transaction> {
+  async createTransaction(
+    createTransactionDto: CreateTransactionDto,
+    user: User,
+  ): Promise<Transaction> {
     const { categoryId } = createTransactionDto;
 
     const category = await this.categoryRepository.getCategoryById(categoryId);
@@ -31,6 +35,7 @@ export class TransactionService {
     const transaction = this.transactionRepository.createTransaction(
       createTransactionDto,
       category,
+      user,
     );
 
     return transaction;

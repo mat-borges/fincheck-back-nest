@@ -4,6 +4,7 @@ import { Injectable, Logger } from '@nestjs/common';
 import { Category } from '@modules/categories/category.entity';
 import { CreateTransactionDto } from './dto/create-transaction.dto';
 import { Transaction } from './transaction.entity';
+import { User } from '@modules/auth/user.entity';
 import { logUnknownError } from 'src/common/utils/log-error.util';
 
 @Injectable()
@@ -13,11 +14,11 @@ export class TransactionRepository extends Repository<Transaction> {
     super(Transaction, dataSource.createEntityManager());
   }
 
-  async getTransactions(): Promise<Transaction[]> {
+  async getTransactions(user: User): Promise<Transaction[]> {
     this.logger.verbose('Retrieving all transactions');
 
     try {
-      const transactions = await this.find();
+      const transactions = await this.find({ where: { user: { id: user.id } } });
 
       return transactions;
     } catch (error) {
@@ -28,10 +29,19 @@ export class TransactionRepository extends Repository<Transaction> {
   async createTransaction(
     createTransactionDto: CreateTransactionDto,
     category: Category,
+    user: User,
   ): Promise<Transaction> {
-    const { title, amount, date, categoryId, type } = createTransactionDto;
+    const { title, description, amount, date, categoryId, type } = createTransactionDto;
 
-    const transaction = this.create({ title, amount, date, categoryId, category, type });
+    const transaction = this.create({
+      title,
+      description,
+      amount,
+      date,
+      type,
+      categoryId,
+      userId: user.id,
+    });
 
     try {
       await this.save(transaction);

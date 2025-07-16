@@ -1,11 +1,12 @@
 import { ConfigModule, ConfigService } from '@nestjs/config';
 
+import { AuthModule } from './modules/auth/auth.module';
 import { CategoryModule } from './modules/categories/category.module';
 import { Module } from '@nestjs/common';
 import { TransactionModule } from './modules/transactions/transaction.module';
 import { TypeOrmModule } from '@nestjs/typeorm';
+import { User } from '@modules/auth/user.entity';
 import { configValidationSchema } from './config/config.schema';
-import { AuthModule } from './modules/auth/auth.module';
 
 @Module({
   imports: [
@@ -26,7 +27,7 @@ import { AuthModule } from './modules/auth/auth.module';
         username: configService.get<string>('DB_USERNAME'),
         password: configService.get<string>('DB_PASSWORD'),
         database: configService.get<string>('DB_DATABASE'),
-        entities: [__dirname + '/**/*.entity{.ts,.js}'],
+        entities: [__dirname + '/**/*.entity{.ts,.js}', User],
       }),
     }),
     TransactionModule,

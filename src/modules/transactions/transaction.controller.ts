@@ -1,25 +1,29 @@
-import { Body, Controller, Get, Logger, Post } from '@nestjs/common';
+import { Body, Controller, Get, Logger, Post, UseGuards } from '@nestjs/common';
 
 import { Transaction } from './transaction.entity';
 import { TransactionService } from './transaction.service';
 import { CreateTransactionDto } from './dto/create-transaction.dto';
+import { GetUser } from '@modules/auth/get-user.decorator';
+import { User } from '@modules/auth/user.entity';
+import { JwtAuthGuard } from '@modules/auth/jwt-auth.guard';
 
 @Controller('transactions')
+@UseGuards(JwtAuthGuard)
 export class TransactionController {
   private logger = new Logger('TransactionController');
   constructor(private transactionService: TransactionService) {}
 
   @Get()
-  getTransactions(): Promise<Transaction[]> {
-    this.logger.verbose('Retrieving all transactions');
+  getTransactions(@GetUser() user: User): Promise<Transaction[]> {
+    this.logger.verbose(`User ${user.email} retrieving all transactions...`);
 
-    return this.transactionService.getTransactions();
+    return this.transactionService.getTransactions(user);
   }
 
   @Post()
-  createTransaction(@Body() createTransactionDto: CreateTransactionDto) {
+  createTransaction(@Body() createTransactionDto: CreateTransactionDto, @GetUser() user: User) {
     this.logger.verbose(`Creating a new transaction with title: ${createTransactionDto.title}`);
 
-    return this.transactionService.createTransaction(createTransactionDto);
+    return this.transactionService.createTransaction(createTransactionDto, user);
   }
 }
