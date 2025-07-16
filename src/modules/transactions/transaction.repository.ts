@@ -1,7 +1,6 @@
 import { DataSource, Repository } from 'typeorm';
-import { Injectable, Logger } from '@nestjs/common';
+import { Injectable, Logger, NotFoundException } from '@nestjs/common';
 
-import { Category } from '@modules/categories/category.entity';
 import { CreateTransactionDto } from './dto/create-transaction.dto';
 import { Transaction } from './transaction.entity';
 import { User } from '@modules/auth/user.entity';
@@ -15,7 +14,7 @@ export class TransactionRepository extends Repository<Transaction> {
   }
 
   async getTransactions(user: User): Promise<Transaction[]> {
-    this.logger.verbose('Retrieving all transactions');
+    this.logger.verbose(`Retrieving all transactions of user: ${user.email}...`);
 
     try {
       const transactions = await this.find({ where: { user: { id: user.id } } });
@@ -26,9 +25,22 @@ export class TransactionRepository extends Repository<Transaction> {
     }
   }
 
+  async getTransactionById(id: string, user: User): Promise<Transaction> {
+    this.logger.verbose('Retrieving transaction by ID...');
+
+    try {
+      const transaction = await this.findOne({ where: { user: { id: user.id }, id } });
+
+      if (!transaction) throw new NotFoundException('No transaction found with this ID');
+
+      return transaction;
+    } catch (error) {
+      logUnknownError(this.logger, 'get transaction by ID', user, undefined, error);
+    }
+  }
+
   async createTransaction(
     createTransactionDto: CreateTransactionDto,
-    category: Category,
     user: User,
   ): Promise<Transaction> {
     const { title, description, amount, date, categoryId, type } = createTransactionDto;

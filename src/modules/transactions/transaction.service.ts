@@ -32,11 +32,7 @@ export class TransactionService {
       throw new Error(`Category with ID ${categoryId} does not exist.`);
     }
 
-    const transaction = this.transactionRepository.createTransaction(
-      createTransactionDto,
-      category,
-      user,
-    );
+    const transaction = this.transactionRepository.createTransaction(createTransactionDto, user);
 
     return transaction;
   }
