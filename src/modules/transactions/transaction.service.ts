@@ -5,6 +5,7 @@ import { Transaction } from './transaction.entity';
 import { CreateTransactionDto } from './dto/create-transaction.dto';
 import { CategoryRepository } from '@modules/categories/category.repository';
 import { User } from '@modules/auth/user.entity';
+import { UpdateTransactionDto } from './dto/update-transaction.dto';
 
 @Injectable()
 export class TransactionService {
@@ -39,5 +40,17 @@ export class TransactionService {
     const transaction = this.transactionRepository.createTransaction(createTransactionDto, user);
 
     return transaction;
+  }
+
+  async updateTransaction(
+    id: string,
+    updateTransactionDto: UpdateTransactionDto,
+    user: User,
+  ): Promise<Transaction> {
+    return await this.transactionRepository.updateTransaction(id, updateTransactionDto, user);
+  }
+
+  async deleteTransaction(id: string, user: User): Promise<void> {
+    await this.transactionRepository.deleteTransaction(id, user);
   }
 }
