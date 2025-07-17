@@ -9,7 +9,7 @@ export function logUnknownError(
   extra?: unknown,
   error?: unknown,
 ): never {
-  let message = `Failed to ${action}`;
+  let message = `❗❗ Failed to ${action}`;
 
   if (user?.email != null) {
     message += ` for user "${user.email}"`;
@@ -19,15 +19,22 @@ export function logUnknownError(
     message += `. Context: ${JSON.stringify(extra)}`;
   }
 
+  // Handle database specific errors
   if (error instanceof QueryFailedError) {
     const dbError = error as QueryFailedError & { code?: string };
     logger.error(`${message}: ${dbError.message}`, dbError.stack);
 
-    if (dbError.code === '23505') {
-      throw new ConflictException('Resource already exists');
+    switch (dbError.code) {
+      case '23505':
+        throw new ConflictException('Resource already exists');
+      case '23503':
+        throw new ConflictException('Referenced resource does not exist');
+      default:
+        break;
     }
   }
 
+  // Handle other error types
   if (error instanceof Error) {
     logger.error(`${message}: ${error.message}`, error.stack);
   } else {
